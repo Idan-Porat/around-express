@@ -1,6 +1,5 @@
 const express = require('express');
 
-const app = express();
 const { userRouter } = require('./routes/users');
 const { cardRouter } = require('./routes/cards');
 const { readFileUsers } = require('./routes/users');
@@ -9,11 +8,12 @@ const { readFileCards } = require('./routes/cards');
 readFileCards();
 readFileUsers();
 
-const { PORT = 3000 } = process.env;
+const app = express();
+const { PORT = 3000, BASE_PATH } = process.env;
 
-app.use('/users', userRouter);
-app.use('/cards', cardRouter);
+app.use('/', userRouter);
+app.use('/', cardRouter);
 
 app.listen(PORT, () => {
-  console.log(`App listening at port ${PORT}`);
+  console.log(`App listening at port ${BASE_PATH}`);
 });

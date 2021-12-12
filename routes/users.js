@@ -5,18 +5,21 @@ const users = require('../data/users.json');
 
 const readFileUsers = () => {
   const filePath = path.join(__dirname, '../data/users.json');
-  console.log('path', filePath);
   fs.readFile(filePath, { encoding: 'utf8' }, (err, data) => {
     console.log(data);
   });
 };
 
 userRouter.get('/users', (req, res) => {
-  if (!users[req.params]) {
-    res.send('This user doesn`t exist');
+  res.send(users);
+});
+
+userRouter.get('/users/:id', (req, res) => {
+  if (!users[req.params.id]) {
+    res.status(404).send({ message: 'User ID not found' });
     return;
   }
-  res.send(req.params);
+  res.status(200).send(users[req.params.id]);
 });
 
 module.exports = {

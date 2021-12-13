@@ -4,17 +4,6 @@ const path = require('path');
 
 const filePath = path.join(__dirname, '../data/cards.json');
 
-cardRouter.get('/', (req, res) => {
-  fs.readFile(filePath, { encoding: 'utf8' })
-    .then((cards) => {
-      const parsedCardsData = JSON.parse(cards);
-      res.status(200).send({ data: parsedCardsData });
-    })
-    .catch(() => {
-      res.status(500).send({ message: 'An error is found' });
-    });
-});
-
 cardRouter.get('/cards', (req, res) => {
   fs.readFile(filePath, 'utf8')
     .then((cards) => {
@@ -22,7 +11,7 @@ cardRouter.get('/cards', (req, res) => {
       res.status(200).send({ data: parsedCardsData });
     })
     .catch(() => {
-      res.status(404).send({ message: 'An error is found' });
+      res.status(500).send({ message: 'An error is found' });
     });
 });
 

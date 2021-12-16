@@ -1,22 +1,27 @@
 const Card = require('../models/cards');
 
+const STAT_CODE_200 = 200;
+const ERR_CODE_400 = 400;
+const ERR_CODE_404 = 404;
+const ERR_CODE_500 = 500;
+
 module.exports.getCards = (req, res) => {
   Card.find({})
     .orFail(() => {
       const error = new Error('No card found');
-      error.statusCode = 404;
+      error.statusCode = ERR_CODE_404;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
     .then((card) => {
-      res.status(200).send({ data: card });
+      res.status(STAT_CODE_200).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid card' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
       } else {
-        res.status(500).send({ message: err.message } || 'internal server error');
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
     });
 };
@@ -33,17 +38,17 @@ module.exports.createCard = (req, res) => {
   )
     .orFail(() => {
       const error = new Error('Invalid data');
-      error.statusCode = 400;
+      error.statusCode = ERR_CODE_400;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
-    .then((card) => res.status(200).send({ data: card }))
+    .then((card) => res.status(STAT_CODE_200).send({ data: card }))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid card' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
+      if (err.name === 'ValidationError') {
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
       } else {
-        res.status(500).send({ message: err.message } || 'internal server error');
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
     });
 };
@@ -53,17 +58,17 @@ module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .orFail(() => {
       const error = new Error('No card found with that id');
-      error.statusCode = 404;
+      error.statusCode = ERR_CODE_404;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid card' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
       } else {
-        res.status(500).send({ message: err.message } || 'internal server error');
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
     });
 };
@@ -77,17 +82,17 @@ module.exports.likeCard = (req, res) => {
     { new: true },
   ).orFail(() => {
     const error = new Error('No card found with that id');
-    error.statusCode = 404;
+    error.statusCode = ERR_CODE_404;
     throw error; // Remember to throw an error so .catch handles it instead of .then
   })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid card' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
       } else {
-        res.status(500).send({ message: err.message } || 'internal server error');
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
     });
 };
@@ -101,17 +106,17 @@ module.exports.dislikeCard = (req, res) => {
     { new: true },
   ).orFail(() => {
     const error = new Error('No card found with that id');
-    error.statusCode = 404;
+    error.statusCode = ERR_CODE_404;
     throw error; // Remember to throw an error so .catch handles it instead of .then
   })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid card' });
-      } else if (err.statusCode === 404) {
-        res.status(404).send({ message: err.message });
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
       } else {
-        res.status(500).send({ message: err.message } || 'internal server error');
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
     });
 };

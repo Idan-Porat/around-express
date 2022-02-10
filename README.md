@@ -2,7 +2,7 @@
 
 # In this project I've specialized in:
 
-- MongoDB- Create, add, edit and search through the DB.
+- MongoDB Create, add, edit and search through the DB.
 - Building an API server with Node.js and Express.JS.
 - Routing.
 - Handle requests.
